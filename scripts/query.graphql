@@ -1,0 +1,70 @@
+query($owner: String!, $name: String!, $first: Int!, $after: String) {
+  repository(owner: $owner, name: $name) {
+    pullRequests(
+      first: $first
+      states: [MERGED]
+      orderBy: { field: UPDATED_AT, direction: DESC }
+      after: $after
+    ) {
+      totalCount
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        number
+        title
+        createdAt
+        updatedAt
+        closedAt
+        mergedAt
+        state
+        additions
+        deletions
+        changedFiles
+        files(first: 100) {
+          totalCount
+          nodes {
+            path
+            additions
+            deletions
+            changeType
+          }
+        }
+        comments(first: 100) {
+          totalCount
+          nodes {
+            bodyText
+            createdAt
+          }
+        }
+        reviews(first: 10) {
+          totalCount
+          nodes {
+            state
+            comments {
+              totalCount
+            }
+          }
+        }
+        commits(first: 10) {
+          totalCount
+          nodes {
+            commit {
+              message
+              authoredDate
+            }
+          }
+        }
+        labels(first: 10) {
+          nodes {
+            name
+          }
+        }
+        bodyText
+        isDraft
+        reviewDecision
+      }
+    }
+  }
+}
